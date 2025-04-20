@@ -2,7 +2,6 @@ const express = require("express");
 let books = require("./booksdb.js");
 let authenticatedUser = require("./auth_users.js").authenticatedUser;
 let isValid = require("./auth_users.js").isValid;
-let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 public_users.post("/register", async (req, res) => {
@@ -53,6 +52,9 @@ public_users.get("/author/:author", function (req, res) {
   if (!req.params.author) {
     return res.status(400).json({ message: "Author name is missing" });
   }
+  if (typeof req.params.author !== "string") {
+    return res.status(400).json({ message: "Book title is invalid" });
+  }
   const book = Object.values(books).filter((_book) =>
     _book.author.toLowerCase().includes(req.params.author.toLowerCase())
   );
@@ -66,6 +68,9 @@ public_users.get("/author/:author", function (req, res) {
 public_users.get("/title/:title", function (req, res) {
   if (!req.params.title) {
     return res.status(400).json({ message: "Book title is missing" });
+  }
+  if (typeof req.params.title !== "string") {
+    return res.status(400).json({ message: "Book title is invalid" });
   }
   const book = Object.values(books).filter((_book) =>
     _book.title.toLowerCase().includes(req.params.title.toLowerCase())

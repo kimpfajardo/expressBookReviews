@@ -80,7 +80,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     return res.status(400).json({ message: "ISBN is missing" });
   }
 
-  if (!review) {
+  if (!review || typeof review !== 'string') {
     return res.status(400).json({ message: "Error saving review" });
   }
 
